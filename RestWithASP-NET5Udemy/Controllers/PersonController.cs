@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using RestWithASP_NET5Udemy.Model;
+using RestWithASP_NET5Udemy.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +10,62 @@ using System.Threading.Tasks;
 namespace RestWithASP_NET5Udemy.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CalculatorController : ControllerBase
-    {        
+    [Route("api/[controller]")]
+    public class PersonController : ControllerBase
+    {
 
-        [HttpGet("sum/{number1}/{number2}")]
-        public ActionResult Sum(string number1, string number2)
+        //declara o uso do serviço IPersonService
+
+        private IPersonService _ipersonService;
+
+        public PersonController(IPersonService ipersonService)
         {
-            if (IsNumeric(number1) && IsNumeric(number2))
-            {
-                var sum = ConvertToDecimal(number1) + ConvertToDecimal(number2);
-                return Ok(sum.ToString());
+            _ipersonService = ipersonService;
+        }
+
+        [HttpGet]
+        public ActionResult Get()
+        {
+            return Ok(_ipersonService.FindAll());
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult GetById(int nId)
+        {
+            var lPerson = _ipersonService.FindById(nId);
+
+            if (lPerson == null) {
+                return NotFound();
             }
-            return BadRequest("Valores inválidos");
+            return Ok(lPerson);
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody] Person person)
+        {
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return Ok(_ipersonService.Create(person));
+        }
+
+
+        [HttpPut]
+        public ActionResult Put([FromBody] Person person)
+        {
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return Ok(_ipersonService.Update(person));
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Detele(int nId)
+        {
+            _ipersonService.Delete(nId);            
+            return NoContent();
         }
 
     }
