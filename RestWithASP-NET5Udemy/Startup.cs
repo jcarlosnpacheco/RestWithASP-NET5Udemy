@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using RestWithASP_NET5Udemy.Model.Context;
 using RestWithASP_NET5Udemy.Services;
 using RestWithASP_NET5Udemy.Services.Implementations;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace RestWithASP_NET5Udemy
 {
@@ -29,7 +30,14 @@ namespace RestWithASP_NET5Udemy
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RestWithASP_NET5Udemy", Version = "v1" });
             });
 
-            services.AddSingleton<IPersonService, PersonServiceImplementation>();
+            //variável responsável por ler o arquivo appsettings.json e pegar a conexão com o banco de dados.
+            var lconnection = Configuration["ConnectionStrings:SqlServerConnectionString"];
+
+            //foi necessário instalar o pacote nuget Microsoft.EntityFrameworkCore.SqlServer
+            services.AddDbContext<SQLServerContext>(options => options.UseSqlServer(lconnection));
+
+            //antes era addsingleton mas estava dando erro, mudamos para Addscopped
+            services.AddScoped<IPersonService, PersonServiceImplementation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

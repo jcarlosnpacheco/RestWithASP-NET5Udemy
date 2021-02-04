@@ -30,9 +30,9 @@ namespace RestWithASP_NET5Udemy.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetById(int nId)
+        public ActionResult Get(int Id)
         {
-            var lPerson = _ipersonService.FindById(nId);
+            var lPerson = _ipersonService.FindById(Id);
 
             if (lPerson == null) {
                 return NotFound();
@@ -62,9 +62,9 @@ namespace RestWithASP_NET5Udemy.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Detele(int nId)
+        public ActionResult Delete(int Id)
         {
-            _ipersonService.Delete(nId);            
+            _ipersonService.Delete(Id);            
             return NoContent();
         }
 
