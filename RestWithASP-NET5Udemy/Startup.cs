@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RestWithASP_NET5Udemy.Model.Context;
-using RestWithASP_NET5Udemy.Services;
-using RestWithASP_NET5Udemy.Services.Implementations;
+using RestWithASP_NET5Udemy.Business.Implementations;
 using Microsoft.EntityFrameworkCore;
+using RestWithASP_NET5Udemy.Repository.Implementations;
 
 namespace RestWithASP_NET5Udemy
 {
@@ -37,7 +37,8 @@ namespace RestWithASP_NET5Udemy
             services.AddDbContext<SQLServerContext>(options => options.UseSqlServer(lconnection));
 
             //antes era addsingleton mas estava dando erro, mudamos para Addscopped
-            services.AddScoped<IPersonService, PersonServiceImplementation>();
+            services.AddScoped<Business.IPersonBusiness, PersonBusinessImplementation>();
+            services.AddScoped<Repository.IPersonRepository, PersonRepositoryImplementation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

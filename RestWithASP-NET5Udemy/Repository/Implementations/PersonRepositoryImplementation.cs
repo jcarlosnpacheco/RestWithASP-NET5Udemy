@@ -6,18 +6,20 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RestWithASP_NET5Udemy.Services.Implementations
+namespace RestWithASP_NET5Udemy.Repository.Implementations
 {
-    public class PersonServiceImplementation : IPersonService
+    /// <summary>
+    /// Esta classe é responsável apenas pela persistência dos dados em Banco.
+    /// </summary>
+    public class PersonRepositoryImplementation : IPersonRepository
     {
         private SQLServerContext _context;
 
         //iremos usar a variável context para se conectar no BD
-        public PersonServiceImplementation(SQLServerContext context)
+        public PersonRepositoryImplementation(SQLServerContext context)
         {
             _context = context;
         }
-
 
         //busca todos os registros linkados com a variável context
         public List<Person> FindAll()
@@ -85,7 +87,7 @@ namespace RestWithASP_NET5Udemy.Services.Implementations
             }
         }
 
-        private bool Exists(int nId)
+        public bool Exists(int nId)
         {
             return _context.Persons.Any(p => p.Id.Equals(nId));
         }
